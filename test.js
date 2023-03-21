@@ -12,6 +12,8 @@ describe('consulterSolde',  () => {
 
         expect(solde).to.equal(0);
     });
+
+
     it('consulter solde une fois 10 € déposé dedans', () => {
         const compteBancaire = new Compte()
 
@@ -20,6 +22,8 @@ describe('consulterSolde',  () => {
 
         expect(compteBancaire.consulterSolde()).to.equal(10);
     });
+
+
     it('consulter solde une fois 10 € ajoutés puis 5 € débités dedans', () => {
         const compteBancaire = new Compte()
         const depotAvantRetrait = 10;
@@ -29,6 +33,8 @@ describe('consulterSolde',  () => {
 
         expect(compteBancaire.consulterSolde()).to.equal(5);
     });
+
+
        it('Message d\'erreur si solde inférieur au retrait demandé.', () => {
         const compteBancaire = new Compte()
         const depotAvantRetrait = 5;
@@ -39,4 +45,19 @@ describe('consulterSolde',  () => {
         expect(compteBancaire.consulterSolde()).to.equal(5);
         expect(compteBancaire.consulterMessageErreur()).to.equal('Solde insuffisant pour un retrait.');
     });
+
+    it('Vérifier absence transaction', () => {
+        const compteBancaire = new Compte()
+
+        expect(compteBancaire.consulterHistorique()).to.eql([])
+    });
+
+    it('Vérifier date de la transaction dans histo', () => {
+        const compteBancaire = new Compte()
+        compteBancaire.solde = 10
+        compteBancaire.debiter(5)
+
+        expect(compteBancaire.consulterHistorique()[0].date).to.eql(new Date().getDate() + '/' + new Date().getMonth() + '/' + new Date().getFullYear())
+    });
+
 });
