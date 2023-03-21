@@ -1,7 +1,9 @@
 const chai = require('chai');
+
 const expect = chai.expect;
-describe('Array',  () => {
+describe('BankAccount',  () => {
     it('test', () => {
-      expect().to.equal('');
+    const credit = 0
+      expect(credit).to.equal(0);
     });
 });
