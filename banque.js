@@ -3,7 +3,8 @@ module.exports = class Compte {
 solde = 0;
 messageErreur = '';
 historique = []
-today = new Date().getDate() + '/' + new Date().getMonth() + '/' + new Date().getFullYear() + ' ' + new Date().getHours()
+today = new Date().getDate() + '/' + new Date().getMonth() + '/' + new Date().getFullYear() + ' ' + new Date().getHours() + ':' + new Date().getMinutes()
++ ':' + new Date().getSeconds() + ':' + new Date().getMilliseconds()
 
 consulterSolde () {
     return this.solde;
