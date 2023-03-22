@@ -8,8 +8,8 @@ class Horloge {
 }
 
 class Repository {
-    sauvegarder() {
-
+    sauvegarder(transaction) {
+        
     }
 
     recupererSolde() {
@@ -22,6 +22,7 @@ module.exports = class Compte {
 solde = 0;
 messageErreur = '';
 historique = [];
+transaction = {};
 
 constructor(horloge = new Horloge(), repository = new Repository()){
     this.horloge = horloge.today();
@@ -35,8 +36,9 @@ consulterSolde () {
 
 crediter (depot) {
     this.solde += depot;
-    this.historique.push({date: this.horloge, montant: depot, balance: this.solde});
-    this.repository.sauvegarder();
+    this.transaction = {date: this.horloge, montant: depot, balance: this.solde}
+    this.historique.push(this.transaction);
+    this.repository.sauvegarder(this.transaction);
 }
 
 debiter(retrait) {
@@ -44,8 +46,9 @@ debiter(retrait) {
         this.messageErreur = 'Solde insuffisant pour un retrait.'
     } else {
         this.solde -= retrait;
-        this.historique.push({date: this.horloge, montant: -retrait, balance: this.solde});
-        this.repository.sauvegarder();
+        this.transaction = {date: this.horloge, montant: -retrait, balance: this.solde}
+        this.historique.push(this.transaction);
+        this.repository.sauvegarder(this.transaction);
     }
 }
 

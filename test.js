@@ -105,4 +105,11 @@ describe('consulterSolde',  () => {
         expect(compteBancaire.repository.compteurRetour).to.equal(1)
     });
 
+    it('Vérifier que les données de la transaction de fonction sauvegarder sont correctes', () => {
+        compteBancaire.crediter(2)
+        expect(compteBancaire.transaction.date).to.equal('22/03/2023 12:05:098');
+        expect(compteBancaire.transaction.montant).to.equal(2);
+        expect(compteBancaire.transaction.balance).to.equal(2);
+    });
+
 });
