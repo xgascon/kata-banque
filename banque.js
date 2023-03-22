@@ -1,10 +1,22 @@
-module.exports = class Compte {
+
+
+class Horloge{
+    today(){
+        return new Date().getDate() + '/' + new Date().getMonth() + '/' + new Date().getFullYear() + ' ' + new Date().getHours() + ':' + new Date().getMinutes()
+        + ':' + new Date().getSeconds() + ':' + new Date().getMilliseconds()
+    }
+}
+
+
+class Compte {
 
 solde = 0;
 messageErreur = '';
 historique = []
-today = new Date().getDate() + '/' + new Date().getMonth() + '/' + new Date().getFullYear() + ' ' + new Date().getHours() + ':' + new Date().getMinutes()
-+ ':' + new Date().getSeconds() + ':' + new Date().getMilliseconds()
+
+constructor(typeHorloge = new Horloge()){
+    this.horloge = typeHorloge
+}
 
 consulterSolde () {
     return this.solde;
@@ -12,7 +24,7 @@ consulterSolde () {
 
 crediter (depot) {
     this.solde += depot;
-    this.historique.push({date: this.today, montant: depot, balance: this.solde})
+    this.historique.push({date: this.horloge.today(), montant: depot, balance: this.solde})
 }
 
 debiter(retrait) {
@@ -20,7 +32,7 @@ debiter(retrait) {
         this.messageErreur = 'Solde insuffisant pour un retrait.'
     } else {
         this.solde -= retrait;
-        this.historique.push({date: this.today, montant: -retrait, balance: this.solde})
+        this.historique.push({date: this.horloge.today(), montant: -retrait, balance: this.solde})
     }
 }
 
@@ -33,3 +45,5 @@ consulterHistorique() {
 }
 
 } 
+
+module.exports = {Horloge, Compte}
