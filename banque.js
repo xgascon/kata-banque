@@ -11,6 +11,7 @@ consulterSolde () {
 
 crediter (depot) {
     this.solde += depot;
+    this.historique.push({date: this.today, montant: depot, balance: this.solde})
 }
 
 debiter(retrait) {
@@ -18,7 +19,7 @@ debiter(retrait) {
         this.messageErreur = 'Solde insuffisant pour un retrait.'
     } else {
         this.solde -= retrait;
-        this.historique.push({date: this.today})
+        this.historique.push({date: this.today, montant: -retrait, balance: this.solde})
     }
 }
 
