@@ -4,17 +4,6 @@ const chai = require('chai');
 
 const expect = chai.expect;
 
-const syncWait = ms => {
-        const end = Date.now() + ms
-        while (Date.now() < end) continue
-    }
-
-class HorlogeTest{
-    today(){
-        return '22/03/2023 11:55:30:023'
-        }
-    }
-
 describe('consulterSolde',  () => {
     it('compte en banque donne le solde de notre argent', () => {
         const compteBancaire = new Compte()
@@ -63,19 +52,18 @@ describe('consulterSolde',  () => {
         expect(compteBancaire.consulterHistorique()).to.eql([])
     });
 
-    it('Vérifier date jusqu\'à la milliseconde, montant et balance de la transaction dans histo après crédit et débit', () => {
-        const horloge = new HorlogeTest()
-
-        const compteBancaire = new Compte(horloge)
+    it('Vérifier date jusqu\'à la seconde, montant et balance de la transaction dans histo après crédit et débit', () => {
+        const compteBancaire = new Compte()
         compteBancaire.crediter(10)
         compteBancaire.debiter(5)
-        syncWait(10)
 
-        expect(compteBancaire.consulterHistorique()[0].date).to.eql('22/03/2023 11:55:30:023')
+        expect(compteBancaire.consulterHistorique()[0].date).to.eql(new Date().getDate() + '/' + new Date().getMonth() + '/' + new Date().getFullYear() + ' ' + new Date().getHours()
+        + ':' + new Date().getMinutes() + ':' + new Date().getSeconds() + ':' + new Date().getMilliseconds())
         expect(compteBancaire.consulterHistorique()[0].montant).to.equal(10)
         expect(compteBancaire.consulterHistorique()[0].balance).to.equal(10)
 
-        expect(compteBancaire.consulterHistorique()[1].date).to.eql('22/03/2023 11:55:30:023')
+        expect(compteBancaire.consulterHistorique()[1].date).to.eql(new Date().getDate() + '/' + new Date().getMonth() + '/' + new Date().getFullYear() + ' ' + new Date().getHours()
+        + ':' + new Date().getMinutes() + ':' + new Date().getSeconds() + ':' + new Date().getMilliseconds())
         expect(compteBancaire.consulterHistorique()[1].montant).to.equal(-5)
         expect(compteBancaire.consulterHistorique()[1].balance).to.equal(5)
     });
