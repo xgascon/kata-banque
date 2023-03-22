@@ -10,10 +10,28 @@ class HorlogeTest {
     }
 }
 
-describe('consulterSolde',  () => {
-    it('compte en banque donne le solde de notre argent', () => {
-        const compteBancaire = new Compte()
+class RepositoryTest {
+    compteurAppels = 0;
+    compteurRetour = 0;
+    sauvegarder() {
+        this.compteurAppels ++;
+    }
 
+    recupererSolde() {
+        this.compteurRetour ++;
+    }
+}
+
+describe('consulterSolde',  () => {
+    let compteBancaire;
+    let horlogeTest;
+    let repositoryTest;
+    beforeEach(function () {
+        horlogeTest = new HorlogeTest()
+        repositoryTest = new RepositoryTest();
+        compteBancaire = new Compte(horlogeTest, repositoryTest);
+    });
+    it('compte en banque donne le solde de notre argent', () => {
         const solde = compteBancaire.consulterSolde()
 
         expect(solde).to.equal(0);
@@ -21,8 +39,6 @@ describe('consulterSolde',  () => {
 
 
     it('consulter solde une fois 10 € déposé dedans', () => {
-        const compteBancaire = new Compte()
-
         const depot = 10
         compteBancaire.crediter(depot)
 
@@ -31,7 +47,6 @@ describe('consulterSolde',  () => {
 
 
     it('consulter solde une fois 10 € ajoutés puis 5 € débités dedans', () => {
-        const compteBancaire = new Compte()
         const depotAvantRetrait = 10;
         const retrait = 5;
         compteBancaire.crediter(depotAvantRetrait);
@@ -42,7 +57,6 @@ describe('consulterSolde',  () => {
 
 
        it('Message d\'erreur si solde inférieur au retrait demandé.', () => {
-        const compteBancaire = new Compte()
         const depotAvantRetrait = 5;
         const retrait = 10;
         compteBancaire.crediter(depotAvantRetrait);
@@ -53,14 +67,11 @@ describe('consulterSolde',  () => {
     });
 
     it('Vérifier absence transaction', () => {
-        const compteBancaire = new Compte()
 
         expect(compteBancaire.consulterHistorique()).to.eql([])
     });
 
     it('Vérifier date jusqu\'à la milliseconde, montant et balance de la transaction dans histo après crédit et débit', () => {
-        const horlogeTest = new HorlogeTest()
-        const compteBancaire = new Compte(horlogeTest)
         compteBancaire.crediter(10)
         compteBancaire.debiter(5)
 
@@ -71,6 +82,27 @@ describe('consulterSolde',  () => {
         expect(compteBancaire.consulterHistorique()[1].date).to.eql(horlogeTest.today())
         expect(compteBancaire.consulterHistorique()[1].montant).to.equal(-5)
         expect(compteBancaire.consulterHistorique()[1].balance).to.equal(5)
+    });
+
+     it('Après un débit et un crédit sur le compte, je dois avoir mes 2 transactions sauvegardées.', () => {
+
+        compteBancaire.crediter(2)
+        compteBancaire.debiter(1)
+        expect(compteBancaire.repository.compteurAppels).to.equal(2)
+    });
+
+     it('Après un débit et un crédit sur le compte, je dois avoir mes 2 transactions sauvegardées quand le solde est insuffisant pour le second débit.', () => {
+        compteBancaire.crediter(2)
+        compteBancaire.debiter(2)
+        compteBancaire.debiter(5)
+        expect(compteBancaire.repository.compteurAppels).to.equal(2)
+    });
+
+     it('Vérifier que l\'on passe par la fonction de récupération.', () => {
+        compteBancaire.crediter(2)
+        compteBancaire.debiter(2)
+        compteBancaire.debiter(5)
+        expect(compteBancaire.repository.compteurRetour).to.equal(1)
     });
 
 });
