@@ -52,16 +52,16 @@ describe('consulterSolde',  () => {
         expect(compteBancaire.consulterHistorique()).to.eql([])
     });
 
-    it('Vérifier date, montant et balance de la transaction dans histo après crédit et débit', () => {
+    it('Vérifier date jusqu\'à la minute, montant et balance de la transaction dans histo après crédit et débit', () => {
         const compteBancaire = new Compte()
         compteBancaire.crediter(10)
         compteBancaire.debiter(5)
 
-        expect(compteBancaire.consulterHistorique()[0].date).to.eql(new Date().getDate() + '/' + new Date().getMonth() + '/' + new Date().getFullYear())
+        expect(compteBancaire.consulterHistorique()[0].date).to.eql(new Date().getDate() + '/' + new Date().getMonth() + '/' + new Date().getFullYear() + ' ' + new Date().getHours())
         expect(compteBancaire.consulterHistorique()[0].montant).to.equal(10)
         expect(compteBancaire.consulterHistorique()[0].balance).to.equal(10)
 
-        expect(compteBancaire.consulterHistorique()[1].date).to.eql(new Date().getDate() + '/' + new Date().getMonth() + '/' + new Date().getFullYear())
+        expect(compteBancaire.consulterHistorique()[1].date).to.eql(new Date().getDate() + '/' + new Date().getMonth() + '/' + new Date().getFullYear() + ' ' + new Date().getHours())
         expect(compteBancaire.consulterHistorique()[1].montant).to.equal(-5)
         expect(compteBancaire.consulterHistorique()[1].balance).to.equal(5)
     });
